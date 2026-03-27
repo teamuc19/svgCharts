@@ -37,7 +37,7 @@
 	$: yTicks = yScale.ticks(5);
 </script>
 
-<div class="chart-card chart-wide">
+<div class="chart-card">
 	<h3>Column Chart</h3>
 	<p>Vergleich der globalen Verkäufe pro Plattform.</p>
 
@@ -49,24 +49,17 @@
 					x2={innerWidth}
 					y1={yScale(tick)}
 					y2={yScale(tick)}
-					stroke="rgba(255,255,255,0.08)"
+					stroke="#e5edf6"
 				/>
 			{/each}
 
-			<line x1="0" x2="0" y1="0" y2={innerHeight} stroke="#7dd3fc" stroke-opacity="0.6" />
-			<line
-				x1="0"
-				x2={innerWidth}
-				y1={innerHeight}
-				y2={innerHeight}
-				stroke="#7dd3fc"
-				stroke-opacity="0.6"
-			/>
+			<line x1="0" x2="0" y1="0" y2={innerHeight} stroke="#94a3b8" />
+			<line x1="0" x2={innerWidth} y1={innerHeight} y2={innerHeight} stroke="#94a3b8" />
 
 			{#each yTicks as tick}
 				<g transform={`translate(0, ${yScale(tick)})`}>
-					<line x2="-6" stroke="#93c5fd" />
-					<text x="-10" y="4" text-anchor="end" font-size="12" fill="#dbeafe">
+					<line x2="-6" stroke="#94a3b8" />
+					<text x="-10" y="4" text-anchor="end" font-size="12" fill="#64748b">
 						{tick}
 					</text>
 				</g>
@@ -79,10 +72,10 @@
 					width={xScale.bandwidth()}
 					height={innerHeight - yScale(d.sales)}
 					rx="12"
-					fill={hovered?.platform === d.platform ? '#60a5fa' : '#3b82f6'}
+					fill={hovered?.platform === d.platform ? '#2563eb' : '#60a5fa'}
 					role="presentation"
 					aria-hidden="true"
-					style="transition: all 0.25s ease;"
+					style="transition: all 0.2s ease;"
 					on:mouseenter={() => (hovered = d)}
 					on:mouseleave={() => (hovered = null)}
 				/>
@@ -92,7 +85,7 @@
 					y={yScale(d.sales) - 10}
 					text-anchor="middle"
 					font-size="12"
-					fill="#e0f2fe"
+					fill="#475569"
 				>
 					{d.sales.toFixed(0)}
 				</text>
@@ -104,7 +97,7 @@
 					y={innerHeight + 24}
 					text-anchor="middle"
 					font-size="12"
-					fill="#dbeafe"
+					fill="#64748b"
 				>
 					{d.platform}
 				</text>
@@ -115,7 +108,7 @@
 				y={innerHeight + 52}
 				text-anchor="middle"
 				font-size="13"
-				fill="#ffffff"
+				fill="#334155"
 			>
 				Plattform
 			</text>
@@ -124,7 +117,7 @@
 				transform={`translate(-50, ${innerHeight / 2}) rotate(-90)`}
 				text-anchor="middle"
 				font-size="13"
-				fill="#ffffff"
+				fill="#334155"
 			>
 				Global Sales (Mio.)
 			</text>

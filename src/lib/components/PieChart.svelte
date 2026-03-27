@@ -7,7 +7,7 @@
 
 	const width = 420;
 	const height = 420;
-	const radius = 130;
+	const radius = 132;
 
 	let hovered = null;
 
@@ -23,7 +23,18 @@
 	$: color = d3
 		.scaleOrdinal()
 		.domain(salesByGenre.map((d) => d.genre))
-		.range(d3.schemeTableau10);
+		.range([
+			'#60a5fa',
+			'#f59e0b',
+			'#f87171',
+			'#34d399',
+			'#a78bfa',
+			'#facc15',
+			'#fb7185',
+			'#38bdf8',
+			'#94a3b8',
+			'#c084fc'
+		]);
 
 	$: pieGenerator = d3.pie().value((d) => d.sales).sort(null);
 	$: pieData = pieGenerator(salesByGenre);
@@ -42,13 +53,13 @@
 					<path
 						d={arcGenerator(arcPart)}
 						fill={color(arcPart.data.genre)}
-						stroke="#0b1020"
+						stroke="#ffffff"
 						stroke-width="3"
-						opacity={hovered?.genre === arcPart.data.genre ? 1 : 0.88}
-						transform={hovered?.genre === arcPart.data.genre ? 'scale(1.06)' : 'scale(1)'}
+						opacity={hovered?.genre === arcPart.data.genre ? 1 : 0.92}
+						transform={hovered?.genre === arcPart.data.genre ? 'scale(1.05)' : 'scale(1)'}
 						role="presentation"
 						aria-hidden="true"
-						style="transition: all 0.25s ease;"
+						style="transition: all 0.2s ease;"
 						on:mouseenter={() => (hovered = arcPart.data)}
 						on:mouseleave={() => (hovered = null)}
 					/>

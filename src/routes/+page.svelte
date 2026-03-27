@@ -8,108 +8,66 @@
 </script>
 
 <svelte:head>
-	<title>svgCharts | Video Game Data Visualization</title>
+	<title>SVG CHARTS</title>
 	<meta
 		name="description"
-		content="Interaktive Datenvisualisierung von Videospielen mit Pie Chart, Column Chart und Scatterplot."
+		content="Interaktive Visualisierung von Videospiel-Daten mit Pie Chart, Column Chart und Scatterplot."
 	/>
 </svelte:head>
 
 <div class="page">
 	<section class="hero">
-		<div class="hero-content">
-			<div class="badge">D3.js • SVG • Svelte • Visual Data Project</div>
-
-			<h1><span class="gradient-text">svgCharts</span></h1>
-
+		<div class="container hero-simple">
+			<h1>SVG CHARTS</h1>
 			<p>
-				Eine moderne, interaktive Website zur Visualisierung von Videospiel-Daten.
-				Die Seite zeigt Verkaufszahlen, Plattformen, Genres und zeitliche Zusammenhänge
-				in drei unterschiedlichen SVG-Charts.
-			</p>
-
-			<div class="hero-stats">
-				<div class="stat-pill">
-					<strong>18</strong>
-					<span>Videospiele im Datensatz</span>
-				</div>
-
-				<div class="stat-pill">
-					<strong>3</strong>
-					<span>Interaktive Diagrammtypen</span>
-				</div>
-
-				<div class="stat-pill">
-					<strong>D3 + SVG</strong>
-					<span>Technische Basis der Visualisierung</span>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section class="section container">
-		<div class="section-heading">
-			<h2>Über das Projekt</h2>
-			<p>
-				Dieses Projekt verbindet D3.js, SVG und Svelte zu einer interaktiven
-				Datenvisualisierung. Die Daten sind fix im Projekt eingebaut und werden
-				ohne User-Eingabe in drei verschiedene Diagramme übertragen. Dadurch können
-				Zusammenhänge schneller erkannt und visuell ansprechend dargestellt werden.
+				Diese Website zeigt interaktive Diagramme mit SVG. Im Rahmen des Kurses werden
+				Daten mit unterschiedlichen Chart-Typen visuell dargestellt und strukturiert
+				analysiert.
 			</p>
 		</div>
 	</section>
 
 	<section class="section container">
-		<div class="section-heading">
-			<h2>Was zeigen die Charts?</h2>
+		<div class="section-header">
+			<div class="section-kicker">Allgemeine Informationen</div>
+			<h2>Über SVG Charts</h2>
 			<p>
-				Jeder Chart betrachtet dieselben Videospiel-Daten aus einer anderen Perspektive:
-				Genre-Verteilung, Plattform-Performance und Zusammenhang zwischen Jahr und Verkäufen.
+				SVG-Charts ermöglichen eine klare und skalierbare Darstellung von Daten im Browser.
+				Sie eignen sich besonders für interaktive Visualisierungen, weil Formen, Farben,
+				Beschriftungen und Hover-Effekte präzise gesteuert werden können.
 			</p>
-		</div>
-
-		<div class="card-grid">
-			<div class="mini-card">
-				<h3>Pie Chart</h3>
-				<p>
-					Zeigt die Verteilung der globalen Verkaufszahlen nach Genre und macht schnell sichtbar,
-					welche Spielarten am stärksten vertreten sind.
-				</p>
-			</div>
-
-			<div class="mini-card">
-				<h3>Column Chart</h3>
-				<p>
-					Vergleicht Plattformen miteinander und zeigt, auf welchen Systemen die höchsten
-					globalen Verkaufszahlen erzielt wurden.
-				</p>
-			</div>
-
-			<div class="mini-card">
-				<h3>Scatterplot</h3>
-				<p>
-					Stellt den Zusammenhang zwischen Erscheinungsjahr und globalen Verkäufen dar.
-					Jeder Punkt steht für ein einzelnes Spiel.
-				</p>
-			</div>
+			<p>
+				In diesem Projekt werden dieselben Daten in drei verschiedenen Diagrammtypen
+				dargestellt: Pie Chart, Column Chart und Scatterplot. Dadurch lassen sich Daten
+				aus mehreren Perspektiven vergleichen und besser interpretieren.
+			</p>
 		</div>
 	</section>
 
 	<section class="charts-section container">
-		<div class="single-chart">
+		<div class="section-header">
+			<div class="section-kicker">Visualisierungen</div>
+			<h2>Interaktive Diagramme</h2>
+			<p>
+				Die folgenden Diagramme basieren auf demselben Datensatz und zeigen die Informationen
+				in unterschiedlicher Form.
+			</p>
+		</div>
+
+		<div class="chart-block">
 			<PieChart data={games} />
 		</div>
 
-		<div class="single-chart">
+		<div class="chart-block">
 			<ColumnChart data={games} />
 		</div>
 
-		<div class="single-chart">
+		<div class="chart-block">
 			<ScatterPlot data={games} />
 		</div>
 	</section>
 
-	<div class="footer-note container">
-		<p>Interaktive SVG-Charts mit D3.js und Svelte</p>
+	<div class="footer container">
+		<p>Projekt zur Datenvisualisierung mit SVG-Charts</p>
 	</div>
 </div>
