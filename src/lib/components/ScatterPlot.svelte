@@ -1,144 +1,151 @@
+<svelte:options runes={false} />
+
 <script>
 	import * as d3 from 'd3';
 
 	export let data = [];
 
-	let svg;
-	let tooltip;
+	const width = 760;
+	const height = 430;
+	const margin = { top: 30, right: 180, bottom: 60, left: 70 };
 
-	$: if (svg && data.length > 0) {
-		drawChart();
-	}
+	const innerWidth = width - margin.left - margin.right;
+	const innerHeight = height - margin.top - margin.bottom;
 
-	function drawChart() {
-		const margin = { top: 20, right: 20, bottom: 60, left: 65 };
-		const width = 540 - margin.left - margin.right;
-		const height = 350 - margin.top - margin.bottom;
+	let hovered = null;
 
-		const cleanData = data.filter((d) => d.Year && d.Global_Sales && d.Critic_Score);
+	$: genres = [...new Set(data.map((d) => d.genre))];
 
-		const svgEl = d3.select(svg);
-		svgEl.selectAll('*').remove();
+	$: color = d3
+		.scaleOrdinal()
+		.domain(genres)
+		.range(d3.schemeTableau10);
 
-		const root = svgEl
-			.attr('width', width + margin.left + margin.right)
-			.attr('height', height + margin.top + margin.bottom);
+	$: xScale = d3
+		.scaleLinear()
+		.domain([d3.min(data, (d) => d.year) - 1, d3.max(data, (d) => d.year) + 1])
+		.range([0, innerWidth]);
 
-		const g = root.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+	$: yScale = d3
+		.scaleLinear()
+		.domain([0, d3.max(data, (d) => d.globalSales) * 1.15])
+		.range([innerHeight, 0]);
 
-		const x = d3
-			.scaleLinear()
-			.domain(d3.extent(cleanData, (d) => d.Year))
-			.nice()
-			.range([0, width]);
-
-		const y = d3
-			.scaleLinear()
-			.domain([0, d3.max(cleanData, (d) => d.Global_Sales)])
-			.nice()
-			.range([height, 0]);
-
-		const r = d3
-			.scaleSqrt()
-			.domain([d3.min(cleanData, (d) => d.Critic_Score), d3.max(cleanData, (d) => d.Critic_Score)])
-			.range([4, 14]);
-
-		const xAxis = g
-			.append('g')
-			.attr('transform', `translate(0,${height})`)
-			.call(d3.axisBottom(x).tickFormat(d3.format('d')));
-
-		xAxis.selectAll('text').attr('fill', '#e5e7eb').attr('font-size', '12px');
-		xAxis.selectAll('.domain, .tick line').attr('stroke', '#6b7280');
-
-		const yAxis = g.append('g').call(d3.axisLeft(y));
-
-		yAxis.selectAll('text').attr('fill', '#e5e7eb').attr('font-size', '12px');
-		yAxis.selectAll('.domain, .tick line').attr('stroke', '#6b7280');
-
-		g.selectAll('circle.point')
-			.data(cleanData)
-			.enter()
-			.append('circle')
-			.attr('class', 'point')
-			.attr('cx', (d) => x(d.Year))
-			.attr('cy', (d) => y(d.Global_Sales))
-			.attr('r', (d) => r(d.Critic_Score))
-			.attr('fill', '#34d399')
-			.attr('opacity', 0.75)
-			.attr('stroke', '#0f172a')
-			.attr('stroke-width', 1)
-			.on('mousemove', (event, d) => {
-				tooltip.style.opacity = '1';
-				tooltip.style.left = `${event.pageX + 12}px`;
-				tooltip.style.top = `${event.pageY - 28}px`;
-				tooltip.innerHTML = `
-					<strong>${d.Name}</strong><br>
-					Jahr: ${d.Year}<br>
-					Sales: ${d.Global_Sales} Mio.<br>
-					Critic Score: ${d.Critic_Score}
-				`;
-			})
-			.on('mouseleave', () => {
-				tooltip.style.opacity = '0';
-			});
-
-		g.append('text')
-			.attr('x', width / 2)
-			.attr('y', height + 45)
-			.attr('text-anchor', 'middle')
-			.attr('fill', '#e5e7eb')
-			.text('Release Year');
-
-		g.append('text')
-			.attr('transform', 'rotate(-90)')
-			.attr('x', -height / 2)
-			.attr('y', -45)
-			.attr('text-anchor', 'middle')
-			.attr('fill', '#e5e7eb')
-			.text('Global Sales (Mio.)');
-	}
+	$: xTicks = xScale.ticks(6).map((d) => Math.round(d));
+	$: yTicks = yScale.ticks(5);
 </script>
 
-<div class="chart-card">
-	<h2>Scatterplot – Jahr vs. globale Verkäufe</h2>
-	<svg bind:this={svg}></svg>
-	<div class="tooltip" bind:this={tooltip}></div>
+<div class="chart-card chart-wide">
+	<h3>Scatterplot</h3>
+	<p>Zusammenhang zwischen Erscheinungsjahr und globalen Verkaufszahlen.</p>
+
+	<div class="scatter-layout">
+		<svg {width} {height} viewBox={`0 0 ${width} ${height}`}>
+			<g transform={`translate(${margin.left}, ${margin.top})`}>
+				{#each yTicks as tick}
+					<line
+						x1="0"
+						x2={innerWidth}
+						y1={yScale(tick)}
+						y2={yScale(tick)}
+						stroke="rgba(255,255,255,0.08)"
+					/>
+				{/each}
+
+				{#each xTicks as tick}
+					<line
+						y1="0"
+						y2={innerHeight}
+						x1={xScale(tick)}
+						x2={xScale(tick)}
+						stroke="rgba(255,255,255,0.05)"
+					/>
+				{/each}
+
+				<line
+					x1="0"
+					x2={innerWidth}
+					y1={innerHeight}
+					y2={innerHeight}
+					stroke="#7dd3fc"
+					stroke-opacity="0.6"
+				/>
+				<line x1="0" x2="0" y1="0" y2={innerHeight} stroke="#7dd3fc" stroke-opacity="0.6" />
+
+				{#each xTicks as tick}
+					<g transform={`translate(${xScale(tick)}, ${innerHeight})`}>
+						<line y2="6" stroke="#93c5fd" />
+						<text y="22" text-anchor="middle" font-size="12" fill="#dbeafe">
+							{tick}
+						</text>
+					</g>
+				{/each}
+
+				{#each yTicks as tick}
+					<g transform={`translate(0, ${yScale(tick)})`}>
+						<line x2="-6" stroke="#93c5fd" />
+						<text x="-10" y="4" text-anchor="end" font-size="12" fill="#dbeafe">
+							{tick}
+						</text>
+					</g>
+				{/each}
+
+				<text
+					x={innerWidth / 2}
+					y={innerHeight + 48}
+					text-anchor="middle"
+					font-size="13"
+					fill="#ffffff"
+				>
+					Erscheinungsjahr
+				</text>
+
+				<text
+					transform={`translate(-50, ${innerHeight / 2}) rotate(-90)`}
+					text-anchor="middle"
+					font-size="13"
+					fill="#ffffff"
+				>
+					Global Sales (Mio.)
+				</text>
+
+				{#each data as d}
+					<circle
+						cx={xScale(d.year)}
+						cy={yScale(d.globalSales)}
+						r={hovered?.title === d.title ? 9 : 6.5}
+						fill={color(d.genre)}
+						opacity={hovered?.title === d.title ? 1 : 0.88}
+						stroke="#0b1020"
+						stroke-width={hovered?.title === d.title ? 3 : 1.5}
+						role="presentation"
+						aria-hidden="true"
+						style="transition: all 0.2s ease;"
+						on:mouseenter={() => (hovered = d)}
+						on:mouseleave={() => (hovered = null)}
+					/>
+				{/each}
+
+				<g transform={`translate(${innerWidth + 20}, 16)`}>
+					<text x="0" y="-6" font-size="13" font-weight="700" fill="#ffffff">Legende</text>
+					{#each genres as genre, i}
+						<g transform={`translate(0, ${i * 24})`}>
+							<rect width="14" height="14" rx="4" fill={color(genre)} />
+							<text x="22" y="11" font-size="12" fill="#dbeafe">{genre}</text>
+						</g>
+					{/each}
+				</g>
+			</g>
+		</svg>
+	</div>
+
+	{#if hovered}
+		<div class="tooltip-box">
+			<strong>{hovered.title}</strong><br />
+			Genre: {hovered.genre}<br />
+			Platform: {hovered.platform}<br />
+			Year: {hovered.year}<br />
+			Global Sales: {hovered.globalSales} Mio.
+		</div>
+	{/if}
 </div>
-
-<style>
-	.chart-card {
-		background: #111827;
-		padding: 1rem;
-		border-radius: 18px;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-		position: relative;
-		min-height: 430px;
-	}
-
-	h2 {
-		margin: 0 0 1rem 0;
-		color: white;
-		font-size: 1.1rem;
-	}
-
-	svg {
-		display: block;
-		margin: 0 auto;
-		max-width: 100%;
-		height: auto;
-	}
-
-	.tooltip {
-		position: fixed;
-		background: rgba(0, 0, 0, 0.9);
-		color: white;
-		padding: 0.55rem 0.75rem;
-		border-radius: 8px;
-		font-size: 0.9rem;
-		pointer-events: none;
-		opacity: 0;
-		transition: opacity 0.15s ease;
-		z-index: 1000;
-	}
-</style>

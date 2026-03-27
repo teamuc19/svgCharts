@@ -1,0 +1,20 @@
+export const games = [
+	{ title: 'Minecraft', genre: 'Sandbox', platform: 'PC', year: 2011, globalSales: 300 },
+	{ title: 'GTA V', genre: 'Action', platform: 'PlayStation', year: 2013, globalSales: 185 },
+	{ title: 'Wii Sports', genre: 'Sports', platform: 'Nintendo', year: 2006, globalSales: 82.9 },
+	{ title: 'PUBG', genre: 'Battle Royale', platform: 'PC', year: 2017, globalSales: 75 },
+	{ title: 'Mario Kart 8', genre: 'Racing', platform: 'Nintendo', year: 2014, globalSales: 60 },
+	{ title: 'Red Dead Redemption 2', genre: 'Action', platform: 'PlayStation', year: 2018, globalSales: 61 },
+	{ title: 'The Witcher 3', genre: 'RPG', platform: 'PC', year: 2015, globalSales: 50 },
+	{ title: 'Fortnite', genre: 'Battle Royale', platform: 'PC', year: 2017, globalSales: 120 },
+	{ title: 'EA FC 24', genre: 'Sports', platform: 'PlayStation', year: 2023, globalSales: 24 },
+	{ title: 'Call of Duty: MW3', genre: 'Shooter', platform: 'Xbox', year: 2023, globalSales: 18 },
+	{ title: 'Animal Crossing', genre: 'Simulation', platform: 'Nintendo', year: 2020, globalSales: 45 },
+	{ title: 'League of Legends', genre: 'MOBA', platform: 'PC', year: 2009, globalSales: 32 },
+	{ title: 'Elden Ring', genre: 'RPG', platform: 'PC', year: 2022, globalSales: 23 },
+	{ title: 'Rocket League', genre: 'Sports', platform: 'PC', year: 2015, globalSales: 30 },
+	{ title: 'Valorant', genre: 'Shooter', platform: 'PC', year: 2020, globalSales: 20 },
+	{ title: 'The Sims 4', genre: 'Simulation', platform: 'PC', year: 2014, globalSales: 36 },
+	{ title: 'Zelda: Breath of the Wild', genre: 'Adventure', platform: 'Nintendo', year: 2017, globalSales: 32 },
+	{ title: 'Apex Legends', genre: 'Battle Royale', platform: 'Xbox', year: 2019, globalSales: 25 }
+];
