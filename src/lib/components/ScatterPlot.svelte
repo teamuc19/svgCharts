@@ -13,6 +13,7 @@
 	const innerHeight = height - margin.top - margin.bottom;
 
 	let hovered = null;
+	let selected = null;
 
 	$: genres = [...new Set(data.map((d) => d.genre))];
 
@@ -52,63 +53,37 @@
 
 	<svg {width} {height} viewBox={`0 0 ${width} ${height}`}>
 		<g transform={`translate(${margin.left}, ${margin.top})`}>
+
 			{#each yTicks as tick}
-				<line
-					x1="0"
-					x2={innerWidth}
-					y1={yScale(tick)}
-					y2={yScale(tick)}
-					stroke="#e5edf6"
-				/>
+				<line x1="0" x2={innerWidth} y1={yScale(tick)} y2={yScale(tick)} stroke="#e5edf6"/>
 			{/each}
 
 			{#each xTicks as tick}
-				<line
-					y1="0"
-					y2={innerHeight}
-					x1={xScale(tick)}
-					x2={xScale(tick)}
-					stroke="#f1f5f9"
-				/>
+				<line y1="0" y2={innerHeight} x1={xScale(tick)} x2={xScale(tick)} stroke="#f1f5f9"/>
 			{/each}
 
-			<line x1="0" x2={innerWidth} y1={innerHeight} y2={innerHeight} stroke="#94a3b8" />
-			<line x1="0" x2="0" y1="0" y2={innerHeight} stroke="#94a3b8" />
+			<line x1="0" x2={innerWidth} y1={innerHeight} y2={innerHeight} stroke="#94a3b8"/>
+			<line x1="0" x2="0" y1="0" y2={innerHeight} stroke="#94a3b8"/>
 
 			{#each xTicks as tick}
 				<g transform={`translate(${xScale(tick)}, ${innerHeight})`}>
-					<line y2="6" stroke="#94a3b8" />
-					<text y="22" text-anchor="middle" font-size="12" fill="#64748b">
-						{tick}
-					</text>
+					<line y2="6" stroke="#94a3b8"/>
+					<text y="22" text-anchor="middle" font-size="12" fill="#64748b">{tick}</text>
 				</g>
 			{/each}
 
 			{#each yTicks as tick}
 				<g transform={`translate(0, ${yScale(tick)})`}>
-					<line x2="-6" stroke="#94a3b8" />
-					<text x="-10" y="4" text-anchor="end" font-size="12" fill="#64748b">
-						{tick}
-					</text>
+					<line x2="-6" stroke="#94a3b8"/>
+					<text x="-10" y="4" text-anchor="end" font-size="12" fill="#64748b">{tick}</text>
 				</g>
 			{/each}
 
-			<text
-				x={innerWidth / 2}
-				y={innerHeight + 48}
-				text-anchor="middle"
-				font-size="13"
-				fill="#334155"
-			>
+			<text x={innerWidth / 2} y={innerHeight + 48} text-anchor="middle" font-size="13" fill="#334155">
 				Erscheinungsjahr
 			</text>
 
-			<text
-				transform={`translate(-50, ${innerHeight / 2}) rotate(-90)`}
-				text-anchor="middle"
-				font-size="13"
-				fill="#334155"
-			>
+			<text transform={`translate(-50, ${innerHeight / 2}) rotate(-90)`} text-anchor="middle" font-size="13" fill="#334155">
 				Global Sales (Mio.)
 			</text>
 
@@ -116,16 +91,21 @@
 				<circle
 					cx={xScale(d.year)}
 					cy={yScale(d.globalSales)}
-					r={hovered?.title === d.title ? 9 : 6.5}
+					r={
+						selected?.title === d.title
+							? 14
+							: hovered?.title === d.title
+							? 11
+							: 9
+					}
 					fill={color(d.genre)}
-					opacity={hovered?.title === d.title ? 1 : 0.9}
+					opacity={selected?.title === d.title ? 1 : 0.85}
 					stroke="#ffffff"
-					stroke-width={hovered?.title === d.title ? 3 : 1.5}
-					role="presentation"
-					aria-hidden="true"
-					style="transition: all 0.2s ease;"
+					stroke-width={selected?.title === d.title ? 3 : 1.5}
+					style="transition: all 0.2s ease; cursor: pointer;"
 					on:mouseenter={() => (hovered = d)}
 					on:mouseleave={() => (hovered = null)}
+					on:click={() => (selected = d)}
 				/>
 			{/each}
 
@@ -138,16 +118,17 @@
 					</g>
 				{/each}
 			</g>
+
 		</g>
 	</svg>
 
-	{#if hovered}
+	{#if selected}
 		<div class="tooltip-box">
-			<strong>{hovered.title}</strong><br />
-			Genre: {hovered.genre}<br />
-			Platform: {hovered.platform}<br />
-			Year: {hovered.year}<br />
-			Global Sales: {hovered.globalSales} Mio.
+			<strong>{selected.title}</strong><br />
+			Genre: {selected.genre}<br />
+			Platform: {selected.platform}<br />
+			Year: {selected.year}<br />
+			Global Sales: {selected.globalSales} Mio.
 		</div>
 	{/if}
 </div>
