@@ -248,7 +248,6 @@ body {
 .legend h4 {
 	margin: 0 0 1rem;
 	font-size: 0.98rem;
-	letter-spacing: -0.2px;
 	color: #0f172a;
 }
 
@@ -270,12 +269,10 @@ body {
 	height: 14px;
 	border-radius: 4px;
 	display: inline-block;
-	flex-shrink: 0;
 }
 
 .tooltip-box {
 	display: inline-block;
-	margin-top: 1rem;
 	padding: 0.95rem 1rem;
 	border-radius: 16px;
 	background: #f8fbff;
@@ -283,6 +280,9 @@ body {
 	color: #334155;
 	line-height: 1.72;
 	box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+	position: fixed;
+	z-index: 1000;
+	pointer-events: none;
 }
 
 svg {
