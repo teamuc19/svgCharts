@@ -334,3 +334,9 @@ svg {
 		padding: 1.25rem;
 	}
 }
+
+.chart-layout {
+	display: flex;
+	gap: 40px;
+	align-items: center;
+}

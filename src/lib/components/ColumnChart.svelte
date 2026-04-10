@@ -42,79 +42,85 @@
 	<h3>Column Chart</h3>
 	<p>Vergleich der globalen Verkäufe pro Plattform.</p>
 
-	<svg {width} {height}>
-		<g transform={`translate(${margin.left}, ${margin.top})`}>
+	<!-- 🔥 FIX: FLEX LAYOUT -->
+	<div class="chart-layout">
 
-			{#each yTicks as tick}
-				<line x1="0" x2={innerWidth} y1={yScale(tick)} y2={yScale(tick)} stroke="#e5edf6"/>
-			{/each}
+		<svg {width} {height}>
+			<g transform={`translate(${margin.left}, ${margin.top})`}>
 
-			<line x1="0" x2="0" y1="0" y2={innerHeight} stroke="#94a3b8"/>
-			<line x1="0" x2={innerWidth} y1={innerHeight} y2={innerHeight} stroke="#94a3b8"/>
+				{#each yTicks as tick}
+					<line x1="0" x2={innerWidth} y1={yScale(tick)} y2={yScale(tick)} stroke="#e5edf6"/>
+				{/each}
 
-			{#each yTicks as tick}
-				<g transform={`translate(0, ${yScale(tick)})`}>
-					<line x2="-6" stroke="#94a3b8"/>
-					<text x="-10" y="4" text-anchor="end" font-size="12" fill="#64748b">{tick}</text>
-				</g>
-			{/each}
+				<line x1="0" x2="0" y1="0" y2={innerHeight} stroke="#94a3b8"/>
+				<line x1="0" x2={innerWidth} y1={innerHeight} y2={innerHeight} stroke="#94a3b8"/>
 
-			{#each salesByPlatform as d}
-				<rect
-					x={xScale(d.platform)}
-					y={yScale(d.sales)}
-					width={xScale.bandwidth()}
-					height={innerHeight - yScale(d.sales)}
-					rx="12"
-					fill={hovered?.platform === d.platform ? '#2563eb' : '#60a5fa'}
-					on:mouseenter={() => (hovered = d)}
-					on:mouseleave={() => (hovered = null)}
-				/>
+				{#each yTicks as tick}
+					<g transform={`translate(0, ${yScale(tick)})`}>
+						<line x2="-6" stroke="#94a3b8"/>
+						<text x="-10" y="4" text-anchor="end" font-size="12" fill="#64748b">{tick}</text>
+					</g>
+				{/each}
 
-				<text
-					x={xScale(d.platform) + xScale.bandwidth()/2}
-					y={yScale(d.sales) - 10}
-					text-anchor="middle"
-					font-size="12"
-				>
-					{d.sales.toFixed(0)}
+				{#each salesByPlatform as d}
+					<rect
+						x={xScale(d.platform)}
+						y={yScale(d.sales)}
+						width={xScale.bandwidth()}
+						height={innerHeight - yScale(d.sales)}
+						rx="12"
+						fill={hovered?.platform === d.platform ? '#2563eb' : '#60a5fa'}
+						on:mouseenter={() => (hovered = d)}
+						on:mouseleave={() => (hovered = null)}
+					/>
+
+					<text
+						x={xScale(d.platform) + xScale.bandwidth()/2}
+						y={yScale(d.sales) - 10}
+						text-anchor="middle"
+						font-size="12"
+					>
+						{d.sales.toFixed(0)}
+					</text>
+				{/each}
+
+				{#each salesByPlatform as d}
+					<text
+						x={xScale(d.platform) + xScale.bandwidth()/2}
+						y={innerHeight + 24}
+						text-anchor="middle"
+						font-size="12"
+					>
+						{d.platform}
+					</text>
+				{/each}
+
+				<text x={innerWidth/2} y={innerHeight + 52} text-anchor="middle">
+					Plattform
 				</text>
-			{/each}
 
-			{#each salesByPlatform as d}
-				<text
-					x={xScale(d.platform) + xScale.bandwidth()/2}
-					y={innerHeight + 24}
-					text-anchor="middle"
-					font-size="12"
-				>
-					{d.platform}
+				<text transform={`translate(-50, ${innerHeight/2}) rotate(-90)`} text-anchor="middle">
+					Global Sales (Mio.)
 				</text>
+
+			</g>
+		</svg>
+
+		
+		<div class="legend">
+			<h4>Plattformen</h4>
+			{#each salesByPlatform as item}
+				<div class="legend-item">
+					<span class="legend-color" style="background:#60a5fa"></span>
+					<span>{item.platform}</span>
+				</div>
 			{/each}
+		</div>
 
-			<text x={innerWidth/2} y={innerHeight + 52} text-anchor="middle">
-				Plattform
-			</text>
-
-			<text transform={`translate(-50, ${innerHeight/2}) rotate(-90)`} text-anchor="middle">
-				Global Sales (Mio.)
-			</text>
-
-		</g>
-	</svg>
-
-	<div class="legend">
-		<h4>Plattformen</h4>
-		{#each salesByPlatform as item}
-			<div class="legend-item">
-				<span class="legend-color" style={`background:#60a5fa`}></span>
-				<span>{item.platform}</span>
-			</div>
-		{/each}
 	</div>
 
 	{#if hovered}
-		<div class="tooltip-box" style={`position:fixed; left:${mouseX+16}px; top:${mouseY+16}px;`}>
+		<div class="tooltip-box" style={`left:${mouseX+16}px; top:${mouseY+16}px;`}>
 			<strong>{hovered.platform}</strong><br />
 			Global Sales: {hovered.sales.toFixed(1)} Mio.
 		</div>
